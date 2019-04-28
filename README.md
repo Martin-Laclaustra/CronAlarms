@@ -77,7 +77,7 @@ A: No. The scheduler does not use interrupts so your task handling function is n
 _Q: What are the intervals that can be scheduled?_
 
 A: You can find an introduction to crontab here:
-https://es.wikipedia.org/wiki/Cron_(Unix)#Formato_del_fichero_crontab
+https://en.wikipedia.org/wiki/Cron#CRON_expression
 
 (If you need timer intervals shorter than 1 second then you should look for a different library)
 
