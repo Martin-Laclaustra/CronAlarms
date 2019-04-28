@@ -1,0 +1,16 @@
+{
+"name": "CronAlarms",
+"frameworks": "Arduino",
+"keywords": "cron, Time, alarm, schedule, date, hour, minute, second, day, week, month, year",
+"description": "Schedule alarms to occur at specific times with crontab syntax",
+"url": "https://github.com/Martin-Laclaustra/CronAlarms",
+"authors":
+{
+        "name": "Martin Laclaustra"
+},
+"repository":
+{
+    "type": "git",
+    "url": "https://github.com/Martin-Laclaustra/CronAlarms"
+}
+}

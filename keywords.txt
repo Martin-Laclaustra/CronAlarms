@@ -1,0 +1,27 @@
+#######################################
+# Syntax Coloring Map For CronAlarms
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+CronId	LITERAL2
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+create	KEYWORD2
+enable	KEYWORD2
+disable	KEYWORD2
+free	KEYWORD2
+delay	KEYWORD2
+getTriggeredCronId	KEYWORD2
+getIsServicing	KEYWORD2
+#######################################
+# Instances (KEYWORD2)
+#######################################
+Cron	KEYWORD1
+#######################################
+# Constants (LITERAL1)
+#######################################
+dtINVALID_ALARM_ID	LITERAL1
+dtINVALID_TIME	LITERAL1
