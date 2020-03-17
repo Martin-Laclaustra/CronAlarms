@@ -188,7 +188,7 @@ time_t CronClass::getNextTrigger(CronID_t ID) const
 }
 
 // attempt to create a cron alarm and return CronID if successful
-CronID_t CronClass::create(char * cronstring, OnTick_t onTickHandler, bool isOneShot)
+CronID_t CronClass::create(const char * cronstring, OnTick_t onTickHandler, bool isOneShot)
 {
   for (uint8_t id = 0; id < dtNBR_ALARMS; id++) {
     if (!isAllocated(id)) {

@@ -56,7 +56,7 @@ public:
   CronClass();
 
   // Function to create alarms and timers with cron
-  CronID_t create(char * cronstring, OnTick_t onTickHandler, bool isOneShot);
+  CronID_t create(const char * cronstring, OnTick_t onTickHandler, bool isOneShot);
   // isOneShot - trigger once at the given time in the future
 
   // Function that must be evaluated often (at least once every main loop)
