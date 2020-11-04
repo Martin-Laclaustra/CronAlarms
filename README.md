@@ -57,6 +57,8 @@ Other low level functions:
 - enable(ID);  -  enable the alarm 
 - getTriggeredAlarmId();   -  returns the currently triggered  alarm id, only valid in an alarm callback
 
+- globalUpdateNextTrigger(), globalenable(), and globaldisable() - can be used to temporarily suspend activity during timesetting or time zone change
+
 FAQ
 ---
 _Q: What hardware and software is needed to use this library?_
