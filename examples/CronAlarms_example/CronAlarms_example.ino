@@ -10,6 +10,11 @@
  *
  * At startup the time is set to Jan 1 2011  8:29 am
  */
+#ifdef ESP8266
+  #include <ESP8266WiFi.h> // in order to use WiFi.mode(WIFI_OFF)
+#elif defined(ESP32)
+  #include <WiFi.h>
+#endif
 
 #include <time.h>                       // time() ctime()
 #ifdef ESP8266
@@ -20,6 +25,9 @@
 CronId id;
 
 void setup() {
+#if defined(ESP8266) || defined(ESP32)
+  WiFi.mode(WIFI_OFF); // disconect wifi to prevent NTP setting the time
+#endif
   Serial.begin(9600);
   while (!Serial) ; // wait for Arduino Serial Monitor
   Serial.println("Starting setup...");
@@ -32,10 +40,9 @@ void setup() {
   tm_newtime.tm_min = 29;
   tm_newtime.tm_sec = 0;
   tm_newtime.tm_isdst = 0;
-#ifdef ESP8266
+#if defined(ESP8266) || defined(ESP32)
   timeval tv = { mktime(&tm_newtime), 0 };
-  timezone tz = { 0, 0};
-  settimeofday(&tv, &tz);
+  settimeofday(&tv, nullptr);
 #elif defined(__AVR__)
   set_zone(0);
   set_dst(0);
