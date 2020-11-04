@@ -45,11 +45,11 @@ CronEventClass::CronEventClass()
 //**************************************************************
 //* Cron Event Class Methods
 
-void CronEventClass::updateNextTrigger()
+void CronEventClass::updateNextTrigger(bool forced)
 {
   if (isEnabled) {
     time_t timenow = time(nullptr);
-    if (onTickHandler != NULL && nextTrigger <= timenow) {
+    if (onTickHandler != NULL && ((nextTrigger <= timenow) || forced)) {
       // update alarm if next trigger is not yet in the future
       nextTrigger = cron_next(&expr, timenow);
     }
@@ -65,6 +65,26 @@ CronClass::CronClass()
   for(uint8_t id = 0; id < dtNBR_ALARMS; id++) {
     free(id);   // ensure all Alarms are cleared and available for allocation
   }
+}
+
+void CronClass::globalUpdateNextTrigger()
+{
+  for (uint8_t eachCronId = 0; eachCronId < dtNBR_ALARMS; eachCronId++) {
+    if (Alarm[eachCronId].isEnabled) {
+      Alarm[eachCronId].updateNextTrigger(true);
+    }
+  }
+}
+
+void CronClass::globalenable()
+{
+  globalUpdateNextTrigger();
+  globalEnabled = true;
+}
+
+void CronClass::globaldisable()
+{
+  globalEnabled = false;
 }
 
 void CronClass::enable(CronID_t ID)
@@ -141,7 +161,7 @@ bool CronClass::getIsServicing() const
 
 void CronClass::serviceAlarms()
 {
-  if (!isServicing) {
+  if (globalEnabled && !isServicing) {
     isServicing = true;
     for (servicedCronId = 0; servicedCronId < dtNBR_ALARMS; servicedCronId++) {
       if (Alarm[servicedCronId].isEnabled && (time(nullptr) >= Alarm[servicedCronId].nextTrigger)) {

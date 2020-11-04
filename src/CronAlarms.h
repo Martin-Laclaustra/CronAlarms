@@ -35,7 +35,7 @@ class CronEventClass
 {
 public:
   CronEventClass();
-  void updateNextTrigger();
+  void updateNextTrigger(bool forced=false);
   cron_expr expr;
   OnTick_t onTickHandler;
   time_t nextTrigger;
@@ -50,6 +50,7 @@ private:
   CronEventClass Alarm[dtNBR_ALARMS];
   uint8_t isServicing;
   uint8_t servicedCronId; // the alarm currently being serviced
+  bool globalEnabled = true;
   void serviceAlarms();
 
 public:
@@ -63,6 +64,9 @@ public:
   void delay(unsigned long ms = 0);
 
   // low level methods
+  void globalUpdateNextTrigger();
+  void globalenable();                // stop silencing all alarms
+  void globaldisable();               // silence all alarms
   void enable(CronID_t ID);                // enable the alarm to trigger
   void disable(CronID_t ID);               // prevent the alarm from triggering
   CronID_t getTriggeredCronId() const;          // returns the currently triggered  alarm id
