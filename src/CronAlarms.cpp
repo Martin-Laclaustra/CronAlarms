@@ -207,22 +207,29 @@ time_t CronClass::getNextTrigger(CronID_t ID) const
   }
 }
 
+// attempt to create a cron alarm at the specified CronID
+void CronClass::create(CronID_t ID, const char * cronstring, OnTick_t onTickHandler, bool isOneShot)
+{
+  free(ID);
+  const char* err = NULL;
+  memset(&(Alarm[id].expr), 0, sizeof(Alarm[id].expr));
+  cron_parse_expr(cronstring, &(Alarm[id].expr), &err);
+  if (err) {
+    memset(&(Alarm[id].expr), 0, sizeof(Alarm[id].expr));
+    return dtINVALID_ALARM_ID;
+  }
+  Alarm[id].onTickHandler = onTickHandler;
+  Alarm[id].isOneShot = isOneShot;
+  enable(id);
+}
+
 // attempt to create a cron alarm and return CronID if successful
 CronID_t CronClass::create(const char * cronstring, OnTick_t onTickHandler, bool isOneShot)
 {
   for (uint8_t id = 0; id < dtNBR_ALARMS; id++) {
     if (!isAllocated(id)) {
       // here if there is an Alarm id that is not allocated
-      const char* err = NULL;
-      memset(&(Alarm[id].expr), 0, sizeof(Alarm[id].expr));
-      cron_parse_expr(cronstring, &(Alarm[id].expr), &err);
-      if (err) {
-        memset(&(Alarm[id].expr), 0, sizeof(Alarm[id].expr));
-        return dtINVALID_ALARM_ID;
-      }
-      Alarm[id].onTickHandler = onTickHandler;
-      Alarm[id].isOneShot = isOneShot;
-      enable(id);
+      create(id, cronstring, onTickHandler, isOneShot);
       return id;  // alarm created ok
     }
   }
