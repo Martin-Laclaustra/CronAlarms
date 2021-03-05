@@ -24,6 +24,20 @@
 
 CronId id;
 
+class MyCallable {
+  public:
+    MyCallable(size_t rxBufferSize) : _rxBufferSize(rxBufferSize) {}
+
+    void operator()() {
+        Serial.print("[callable] serial RX buffer size: ");
+        Serial.println(_rxBufSize);
+    }
+
+  private:
+    size_t rxBufferSize = 0;
+};
+
+
 void setup() {
 #if defined(ESP8266) || defined(ESP32)
   WiFi.mode(WIFI_OFF); // disconect wifi to prevent NTP setting the time
@@ -58,6 +72,18 @@ void setup() {
   Cron.create("*/15 * * * * *", Repeats, false);           // timer for every 15 seconds
   id = Cron.create("*/2 * * * * *", Repeats2, false);      // timer for every 2 seconds
   Cron.create("*/10 * * * * *", OnceOnly, true);           // called once after 10 seconds
+
+  // using lambda
+  size_t rxBufSize = Serial.getRxBufferSize(); // runtime defined value
+  Cron.create("*/10 * * * * *", // timer for every 10 seconds
+      [](rxBufSize)(){
+        Serial.print("[lambda] serial RX buffer size: ");
+        Serial.println(rxBufSize);
+      }, false);
+
+  // using callable
+  Cron.create("*/10 * * * * *", MyCallable(rxBufSize), false); // timer for every 10 seconds
+
   Serial.println("Ending setup...");
 }
 
