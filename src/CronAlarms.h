@@ -4,7 +4,7 @@
 #define CronAlarms_h
 
 #include <Arduino.h>
-#include <time.h> 
+#include <time.h>
 
 extern "C" {
 #include "ccronexpr/ccronexpr.h"
@@ -28,7 +28,7 @@ typedef CronID_t CronId;  // Arduino friendly name
 #define dtINVALID_ALARM_ID 255
 #define dtINVALID_TIME     (time_t)(-1)
 
-typedef void (*OnTick_t)();  // alarm callback function typedef
+using OnTick_t = std::function<void()>; // can store a plain old callback or a callable
 
 // class defining an alarm instance, only used by dtAlarmsClass
 class CronEventClass
