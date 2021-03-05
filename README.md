@@ -1,13 +1,15 @@
-CronAlarms
-==========
+# CronAlarms
+
 Using expressions suitable for the program cron (crontab syntax), the library allows performing tasks at specific times or after specific intervals.
 
 It depends on ctime library, provided by SDKs.
 
 API resembles the popular TimeAlarms library. Tasks can be created to continuously repeat or to occur only once. It is a wrapper of ccronexpr.
 
-Usage
------
+## Usage
+
+### Using classic callback
+
 Your sketch should call the `Cron.delay()` function in the main loop. It can also replace the Arduino delay() function if a time in milliseconds is specified as argument. The timeliness of triggers depends on sketch calling this function often. Alarms are serviced in the `Cron.delay()` method.
 
 Here is how you create an alarm to trigger a task repeatedly at a particular time of day:
@@ -52,15 +54,50 @@ You can also set specific dates and times within a year, i.e. noon of 4th July.
 
 `Cron.create("0 0 12 4 7 *", Celebration, true);`
 
-Other low level functions:
-- disable( ID);  -  prevent the alarm associated with the given ID from triggering   
-- enable(ID);  -  enable the alarm 
+### Using lambda
+
+You can use a lambda instead of plain old callback.
+
+Using a lambda offers more flexibility: you can set its behavior depending on criteria set at runtime.
+
+eg. the lambda can capture the pinId and pinState and the lambda execute a `digitalWrite(pinId, pinState);`
+
+`Cron.create("0 0 12 4 7 *", [pinId,pinstate](){ digitalWrite(pinId, pinState) }, true);`
+### Using callable
+
+You can use a callable instead of plain old callback.
+
+As for lambda, using a callable offers more flexibility: you can set its behavior depending on criteria set at runtime.
+
+eg. the lambda can capture the pinId and pinState and the lambda execute a `digitalWrite(pinId, pinState);`
+
+```C
+class MyCallable {
+  public:
+    MyCallable(size_t value) : _value(value) {}
+
+    void operator()() {
+        Serial.print("[callable] the value is: ");
+        Serial.println(_value);
+    }
+
+  private:
+    size_t _value = 0;
+};
+
+size_t value = random(99999); // value known at runtime only
+Cron.create("0 0 12 4 7 *", MyCallable(random), true);
+```
+
+### Other low level functions
+- disable( ID);  -  prevent the alarm associated with the given ID from triggering
+- enable(ID);  -  enable the alarm
 - getTriggeredAlarmId();   -  returns the currently triggered  alarm id, only valid in an alarm callback
 
 - globalUpdateNextTrigger(), globalenable(), and globaldisable() - can be used to temporarily suspend activity during timesetting or time zone change
 
-FAQ
----
+## FAQ
+
 _Q: What hardware and software is needed to use this library?_
 
 A: This library requires an SDK with a ctime implementation. No internal or external hardware is used by the Alarm library.
@@ -74,7 +111,7 @@ You can call Cron.delay() if you need to service the scheduler without a delay.
 
 _Q: Are there any restrictions on the code in a task handler function?_
 
-A: No. The scheduler does not use interrupts so your task handling function is no different from other functions you create in your sketch. 
+A: No. The scheduler does not use interrupts so your task handling function is no different from other functions you create in your sketch.
 
 _Q: What are the intervals that can be scheduled?_
 
