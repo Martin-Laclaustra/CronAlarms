@@ -208,9 +208,9 @@ time_t CronClass::getNextTrigger(CronID_t ID) const
 }
 
 // attempt to create a cron alarm at the specified CronID
-CronID_t CronClass::create(CronID_t ID, const char * cronstring, OnTick_t onTickHandler, bool isOneShot)
+CronID_t CronClass::create(CronID_t id, const char * cronstring, OnTick_t onTickHandler, bool isOneShot)
 {
-  free(ID);
+  free(id);
   const char* err = NULL;
   memset(&(Alarm[id].expr), 0, sizeof(Alarm[id].expr));
   cron_parse_expr(cronstring, &(Alarm[id].expr), &err);
@@ -221,7 +221,7 @@ CronID_t CronClass::create(CronID_t ID, const char * cronstring, OnTick_t onTick
   Alarm[id].onTickHandler = onTickHandler;
   Alarm[id].isOneShot = isOneShot;
   enable(id);
-  return id;
+  return id;  // alarm created ok
 }
 
 // attempt to create a cron alarm and return CronID if successful
