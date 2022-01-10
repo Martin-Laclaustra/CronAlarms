@@ -172,7 +172,11 @@ void CronClass::serviceAlarms()
           Alarm[servicedCronId].updateNextTrigger();
         }
         if (TickHandler != NULL) {
+#ifdef USE_STD_FUNCTION_CALLBACK
+          TickHandler();     // call the handler
+#else
           (*TickHandler)();     // call the handler
+#endif
         }
       }
     }
