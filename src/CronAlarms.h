@@ -67,9 +67,11 @@ public:
   void globalUpdateNextTrigger();
   void globalenable();                // stop silencing all alarms
   void globaldisable();               // silence all alarms
-  void enable(CronID_t ID);                // enable the alarm to trigger
+  bool isGlobalEnabled();
+  void enable(CronID_t ID); // enable the alarm to trigger
   void disable(CronID_t ID);               // prevent the alarm from triggering
-  CronID_t getTriggeredCronId() const;          // returns the currently triggered  alarm id
+  bool isEnabled(const CronID_t ID);
+  CronID_t getTriggeredCronId() const;        // returns the currently triggered  alarm id
   bool getIsServicing() const;                    // returns isServicing
 
   void free(CronID_t ID);                  // free the id to allow its reuse
