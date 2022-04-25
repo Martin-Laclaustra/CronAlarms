@@ -87,6 +87,11 @@ void CronClass::globaldisable()
   globalEnabled = false;
 }
 
+bool CronClass::isGlobalEnabled()
+{
+  return globalEnabled;
+}
+
 void CronClass::enable(CronID_t ID)
 {
   if (isAllocated(ID)) {
@@ -99,6 +104,18 @@ void CronClass::disable(CronID_t ID)
 {
   if (isAllocated(ID)) {
     Alarm[ID].isEnabled = false;
+  }
+}
+
+bool CronClass::isEnabled(const CronID_t ID)
+{
+  if (isAllocated(ID))
+  {
+    return Alarm[ID].isEnabled;
+  }
+  else
+  {
+    return false;
   }
 }
 
